@@ -89,7 +89,7 @@ Built with vanilla HTML, CSS, and JavaScript, this project demonstrates modern w
 ![Search Results](https://via.placeholder.com/800x400?text=Add+Search+Results+Screenshot)
 
 ### Live Demo
-👉 **[Try it live here](https://your-site-name.netlify.app)**
+👉 **[Try it live here](https://ai-study-assistant-buddy.netlify.app/)**
 
 ---
 
