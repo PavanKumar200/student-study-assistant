@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Study Assistant</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 Student Study Assistant</h1>
+        <p class="subtitle"><strong>Get AI answers, videos, articles, and study materials instantly!</strong></p>
+        
+        <div class="search-box">
+            <input type="text" id="queryInput" placeholder="Ask any question... (e.g., What is photosynthesis?)">
+            <button onclick="searchAll()">🔍 Search</button>
+        </div>
+        
+        <div id="loading" class="loading" style="display:none;">
+            <p>🔄 Searching for answers...</p>
+        </div>
+        
+        <div id="results" style="display:none;">
+            <div id="aiAnswer" class="section"></div>
+            <div id="videos" class="section"></div>
+            <div id="articles" class="section"></div>
+            <div id="studyMaterials" class="section"></div>
+            <!-- NEW: Cheat Sheets Section -->
+            <div id="cheatSheets" class="section"></div>
+        </div>
+    </div>
+    
+    <script src="config.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

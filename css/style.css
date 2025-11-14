@@ -1,0 +1,416 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    padding: 20px;
+    animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 2.5em;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: titlePulse 3s ease-in-out infinite;
+}
+
+@keyframes titlePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+.subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+    animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.search-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    animation: fadeIn 1.2s ease-in;
+}
+
+#queryInput {
+    flex: 1;
+    padding: 15px 20px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+#queryInput:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    transform: translateY(-2px);
+}
+
+#queryInput:hover {
+    border-color: #aaa;
+}
+
+button {
+    padding: 15px 35px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+button:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+button:active {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(102, 126, 234, 0.4);
+}
+
+.loading {
+    text-align: center;
+    padding: 30px;
+    font-size: 1.2em;
+    color: #667eea;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.section {
+    margin-bottom: 30px;
+    padding: 25px;
+    background: #f9f9f9;
+    border-radius: 12px;
+    border-left: 5px solid #667eea;
+    transition: all 0.3s ease;
+    animation: fadeInUp 0.6s ease-out;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.section h2 {
+    color: #667eea;
+    margin-bottom: 15px;
+    font-size: 1.8em;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.section h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    transition: width 0.3s ease;
+}
+
+.section:hover h2::after {
+    width: 100px;
+}
+
+.section h3 {
+    color: #764ba2;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    animation: slideIn 0.5s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.section ul {
+    list-style: none;
+}
+
+.section li {
+    padding: 12px 0;
+    border-bottom: 1px solid #ddd;
+    transition: all 0.3s ease;
+    animation: listItemFade 0.5s ease-out backwards;
+}
+
+.section li:nth-child(1) { animation-delay: 0.1s; }
+.section li:nth-child(2) { animation-delay: 0.2s; }
+.section li:nth-child(3) { animation-delay: 0.3s; }
+.section li:nth-child(4) { animation-delay: 0.4s; }
+.section li:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes listItemFade {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.section li:hover {
+    padding-left: 10px;
+    background: linear-gradient(90deg, rgba(102, 126, 234, 0.05), transparent);
+    border-left: 3px solid #667eea;
+}
+
+.section li:last-child {
+    border-bottom: none;
+}
+
+.section a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+}
+
+.section a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    transition: width 0.3s ease;
+}
+
+.section a:hover::after {
+    width: 100%;
+}
+
+.section a:hover {
+    color: #764ba2;
+    transform: translateX(5px);
+}
+
+.section p {
+    color: #666;
+    line-height: 1.6;
+    margin-top: 5px;
+    transition: color 0.3s ease;
+}
+
+.section li:hover p {
+    color: #333;
+}
+
+#aiAnswer {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-left-color: #5f72bd;
+}
+
+#aiAnswer:hover {
+    background: linear-gradient(135deg, #e8ecf7 0%, #b8c6db 100%);
+}
+
+#cheatSheets {
+    background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+    border-left: 5px solid #f39c12;
+}
+
+#cheatSheets:hover {
+    background: linear-gradient(135deg, #ffd97d 0%, #fdb93f 100%);
+}
+
+#cheatSheets h2 {
+    color: #d35400;
+}
+
+#cheatSheets a {
+    color: #d35400;
+    font-weight: 600;
+}
+
+#cheatSheets a:hover {
+    color: #e67e22;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #5568d3, #6a3e94);
+}
+
+/* Add study materials section styling */
+#studyMaterials {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    border-left-color: #48c6ef;
+}
+
+#studyMaterials:hover {
+    background: linear-gradient(135deg, #81e8e3 0%, #fcc4d6 100%);
+}
+
+/* Add videos section styling */
+#videos {
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    border-left-color: #ff6b6b;
+}
+
+#videos:hover {
+    background: linear-gradient(135deg, #ffd9b3 0%, #fb9f89 100%);
+}
+
+/* Add articles section styling */
+#articles {
+    background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%);
+    border-left-color: #c779d0;
+}
+
+#articles:hover {
+    background: linear-gradient(135deg, #c688b8 0%, #fdf5c3 100%);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 1.8em;
+    }
+    
+    .search-box {
+        flex-direction: column;
+    }
+    
+    button {
+        width: 100%;
+    }
+    
+    .section:hover {
+        transform: none;
+    }
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading::before {
+    content: '🔄';
+    display: inline-block;
+    animation: spin 2s linear infinite;
+    margin-right: 10px;
+}
