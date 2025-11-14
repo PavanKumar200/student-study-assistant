@@ -1,3 +1,8 @@
+/* ========================================
+   STUDENT STUDY ASSISTANT - COMPLETE CSS
+   Modern, Responsive Design
+   ======================================== */
+
 * {
     margin: 0;
     padding: 0;
@@ -29,6 +34,8 @@ body {
     box-shadow: 0 25px 70px rgba(0,0,0,0.35);
     animation: slideUp 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     backdrop-filter: blur(10px);
+    position: relative;
+    z-index: 1;
 }
 
 @keyframes slideUp {
@@ -168,7 +175,10 @@ button:active {
     box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
 }
 
-/* Enhanced Loading Animation */
+/* ========================================
+   LOADING ANIMATION
+   ======================================== */
+
 .loading {
     text-align: center;
     padding: 60px 30px;
@@ -214,6 +224,10 @@ button:active {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* ========================================
+   RESULTS SECTIONS
+   ======================================== */
 
 .section {
     margin-bottom: 35px;
@@ -406,7 +420,10 @@ button:active {
     color: #333;
 }
 
-/* Section-specific styling with gradients */
+/* ========================================
+   SECTION-SPECIFIC COLORS
+   ======================================== */
+
 #aiAnswer {
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     border-left-color: #5f72bd;
@@ -465,7 +482,10 @@ button:active {
     color: #e67e22;
 }
 
-/* Custom Scrollbar */
+/* ========================================
+   CUSTOM SCROLLBAR
+   ======================================== */
+
 ::-webkit-scrollbar {
     width: 12px;
 }
@@ -486,7 +506,10 @@ button:active {
     box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
 }
 
-/* Subtle background particles effect */
+/* ========================================
+   BACKGROUND PARTICLES EFFECT
+   ======================================== */
+
 body::before {
     content: '';
     position: fixed;
@@ -498,11 +521,6 @@ body::before {
                 radial-gradient(circle at 80% 80%, rgba(255,255,255,0.05) 0%, transparent 50%);
     pointer-events: none;
     z-index: 0;
-}
-
-.container {
-    position: relative;
-    z-index: 1;
 }
 
 /* ========================================
@@ -540,7 +558,7 @@ body::before {
     #queryInput {
         width: 100%;
         padding: 15px 20px;
-        font-size: 16px; /* Prevents zoom on iOS */
+        font-size: 16px;
     }
     
     button {
@@ -549,7 +567,6 @@ body::before {
         font-size: 16px;
     }
     
-    /* Disable hover transform on mobile (prevent jumpiness) */
     button:hover {
         transform: none;
         box-shadow: 0 6px 20px rgba(102, 126, 234, 0.45);
@@ -561,7 +578,6 @@ body::before {
         border-radius: 15px;
     }
     
-    /* Disable section hover effects on mobile */
     .section:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 20px rgba(0,0,0,0.12);
@@ -582,14 +598,12 @@ body::before {
     
     .section a {
         font-size: 0.95em;
-        word-break: break-word;
     }
     
     .section p {
         font-size: 0.9em;
     }
     
-    /* Smaller loading spinner on mobile */
     .loading {
         padding: 40px 20px;
         font-size: 1.1em;
@@ -684,7 +698,6 @@ body::before {
         line-height: 1.6;
     }
     
-    /* Even smaller loading spinner */
     .loading {
         padding: 30px 15px;
         font-size: 1em;
@@ -704,7 +717,6 @@ body::before {
         border-width: 4px;
     }
     
-    /* Simplify scrollbar on mobile */
     ::-webkit-scrollbar {
         width: 6px;
     }
@@ -738,7 +750,6 @@ body::before {
 
 /* Touch device optimizations */
 @media (hover: none) and (pointer: coarse) {
-    /* Disable complex hover effects on touch devices */
     .section:hover {
         transform: none;
     }
@@ -755,7 +766,6 @@ body::before {
         transform: none;
     }
     
-    /* Make touch targets larger */
     button {
         min-height: 48px;
     }
@@ -773,11 +783,6 @@ body::before {
     }
 }
 
-/* Dark mode support (if device prefers dark mode) */
-@media (prefers-color-scheme: dark) {
-    /* Optional: Add dark mode styles here if needed */
-}
-
 /* Reduced motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
     * {
@@ -789,293 +794,5 @@ body::before {
     .loading::before,
     .loading::after {
         animation: none;
-    }
-}
-
-
-
-/* Dark mode toggle button */
-.theme-toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-    transition: all 0.3s ease;
-    z-index: 1000;
-    padding: 0;
-}
-
-.theme-toggle:hover {
-    transform: scale(1.1) rotate(15deg);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-}
-
-.theme-toggle .sun-icon,
-.theme-toggle .moon-icon {
-    font-size: 28px;
-    transition: all 0.3s ease;
-    position: absolute;
-}
-
-.theme-toggle .sun-icon {
-    opacity: 1;
-    transform: rotate(0deg) scale(1);
-}
-
-.theme-toggle .moon-icon {
-    opacity: 0;
-    transform: rotate(180deg) scale(0);
-}
-
-/* Dark mode active state */
-body.dark-mode {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-}
-
-body.dark-mode .theme-toggle {
-    background: linear-gradient(135deg, #ffd93d 0%, #ff6b6b 100%);
-}
-
-body.dark-mode .theme-toggle .sun-icon {
-    opacity: 0;
-    transform: rotate(-180deg) scale(0);
-}
-
-body.dark-mode .theme-toggle .moon-icon {
-    opacity: 1;
-    transform: rotate(0deg) scale(1);
-}
-
-body.dark-mode .container {
-    background: rgba(30, 30, 46, 0.95);
-    box-shadow: 0 25px 70px rgba(0,0,0,0.6);
-}
-
-body.dark-mode h1 {
-    background: linear-gradient(135deg, #7dd3fc, #a78bfa, #7dd3fc);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-body.dark-mode .subtitle {
-    color: #9ca3af;
-}
-
-body.dark-mode #queryInput {
-    background: #1e293b;
-    border-color: #334155;
-    color: #e2e8f0;
-}
-
-body.dark-mode #queryInput:focus {
-    background: #0f172a;
-    border-color: #7dd3fc;
-    box-shadow: 0 0 0 5px rgba(125, 211, 252, 0.2);
-}
-
-body.dark-mode #queryInput::placeholder {
-    color: #64748b;
-}
-
-body.dark-mode .search-box button {
-    background: linear-gradient(135deg, #7dd3fc 0%, #a78bfa 100%);
-}
-
-body.dark-mode .search-box button:hover {
-    box-shadow: 0 10px 30px rgba(125, 211, 252, 0.4);
-}
-
-body.dark-mode .loading {
-    color: #7dd3fc;
-}
-
-body.dark-mode .loading::before {
-    border-color: rgba(125, 211, 252, 0.2);
-    border-top-color: #7dd3fc;
-    box-shadow: 0 0 20px rgba(125, 211, 252, 0.3);
-}
-
-body.dark-mode .loading::after {
-    border-bottom-color: #a78bfa;
-}
-
-body.dark-mode .section {
-    background: #1e293b;
-    border-left-color: #7dd3fc;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-}
-
-body.dark-mode .section:hover {
-    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-    background: #0f172a;
-}
-
-body.dark-mode .section h2 {
-    color: #7dd3fc;
-}
-
-body.dark-mode .section h2::after {
-    background: linear-gradient(90deg, #7dd3fc, #a78bfa);
-}
-
-body.dark-mode .section h3 {
-    color: #a78bfa;
-}
-
-body.dark-mode .section li {
-    border-bottom-color: #334155;
-}
-
-body.dark-mode .section li:hover {
-    border-left-color: #7dd3fc;
-}
-
-body.dark-mode .section li::before {
-    background: linear-gradient(90deg, rgba(125, 211, 252, 0.1), transparent);
-}
-
-body.dark-mode .section a {
-    color: #7dd3fc;
-}
-
-body.dark-mode .section a:hover {
-    color: #a78bfa;
-}
-
-body.dark-mode .section a::after {
-    background: linear-gradient(90deg, #7dd3fc, #a78bfa);
-}
-
-body.dark-mode .section p {
-    color: #94a3b8;
-}
-
-body.dark-mode .section li:hover p {
-    color: #cbd5e1;
-}
-
-/* Dark mode section-specific colors */
-body.dark-mode #aiAnswer {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    border-left-color: #60a5fa;
-}
-
-body.dark-mode #aiAnswer:hover {
-    background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
-}
-
-body.dark-mode #videos {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    border-left-color: #fb923c;
-}
-
-body.dark-mode #videos:hover {
-    background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
-}
-
-body.dark-mode #articles {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    border-left-color: #c084fc;
-}
-
-body.dark-mode #articles:hover {
-    background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
-}
-
-body.dark-mode #studyMaterials {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    border-left-color: #22d3ee;
-}
-
-body.dark-mode #studyMaterials:hover {
-    background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
-}
-
-body.dark-mode #cheatSheets {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    border-left-color: #facc15;
-}
-
-body.dark-mode #cheatSheets:hover {
-    background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
-}
-
-body.dark-mode #cheatSheets h2 {
-    color: #fbbf24;
-}
-
-body.dark-mode #cheatSheets a {
-    color: #fbbf24;
-}
-
-body.dark-mode #cheatSheets a:hover {
-    color: #fcd34d;
-}
-
-body.dark-mode ::-webkit-scrollbar-track {
-    background: #1e293b;
-}
-
-body.dark-mode ::-webkit-scrollbar-thumb {
-    background: linear-gradient(135deg, #7dd3fc, #a78bfa);
-}
-
-body.dark-mode ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(135deg, #60a5fa, #8b5cf6);
-}
-
-/* Smooth transition for theme change */
-body,
-.container,
-h1,
-.subtitle,
-#queryInput,
-button,
-.section,
-.section h2,
-.section h3,
-.section a,
-.section p,
-.section li {
-    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Mobile adjustments for dark mode toggle */
-@media (max-width: 768px) {
-    .theme-toggle {
-        width: 50px;
-        height: 50px;
-        top: 15px;
-        right: 15px;
-    }
-    
-    .theme-toggle .sun-icon,
-    .theme-toggle .moon-icon {
-        font-size: 24px;
-    }
-}
-
-@media (max-width: 480px) {
-    .theme-toggle {
-        width: 45px;
-        height: 45px;
-        top: 10px;
-        right: 10px;
-    }
-    
-    .theme-toggle .sun-icon,
-    .theme-toggle .moon-icon {
-        font-size: 20px;
     }
 }
