@@ -1,0 +1,6 @@
+const CONFIG = {
+    GROQ_API_KEY : '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',
+    YOUTUBE_API_KEY: 'AIzaSyABm2t07luuTZk7E4Uc3cpCax5SKxBm2QE',
+    GOOGLE_CSE_KEY: 'AIzaSyABm2t07luuTZk7E4Uc3cpCax5SKxBm2QE',
+    GOOGLE_CSE_ID: '80e1f6b0742ea4e12'
+};
