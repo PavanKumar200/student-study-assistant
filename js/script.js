@@ -31,81 +31,68 @@ async function searchAll() {
     document.getElementById('results').style.display = 'block';
 }
 
-
-// 1. FIXED: Using correct Gemini model name
+// CORRECTED: Using the new model name
 async function getAIAnswer(query) {
     const aiAnswerDiv = document.getElementById('aiAnswer');
     aiAnswerDiv.innerHTML = '<h2>🤖 AI Answer</h2><p>Loading...</p>';
     
     try {
-        // Try gemini-2.5-flash first (current stable model as of Nov 2025)
-        let url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${CONFIG.GEMINI_API_KEY}`;
+        const url = 'https://api.groq.com/openai/v1/chat/completions';
         
-        let response = await fetch(url, {
+        console.log('Calling Groq API...');
+        
+        const response = await fetch(url, {
             method: 'POST',
             headers: { 
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${CONFIG.GROQ_API_KEY}`
             },
             body: JSON.stringify({
-                contents: [{
-                    parts: [{ 
-                        text: `Explain this topic in detail for students (in 3-4 paragraphs): ${query}` 
-                    }]
-                }]
+                model: 'llama-3.3-70b-versatile', // ✅ UPDATED MODEL NAME
+                messages: [{
+                    role: 'user',
+                    content: `Explain this topic in detail for students (in 3-4 paragraphs): ${query}`
+                }],
+                temperature: 0.7,
+                max_tokens: 2000 // Also fixed token limit
             })
         });
         
-        // If 2.5-flash fails, try gemini-pro as fallback
-        if (!response.ok && response.status === 404) {
-            console.log('Trying fallback model: gemini-pro');
-            url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${CONFIG.GEMINI_API_KEY}`;
-            
-            response = await fetch(url, {
-                method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    contents: [{
-                        parts: [{ 
-                            text: `Explain this topic in detail for students (in 3-4 paragraphs): ${query}` 
-                        }]
-                    }]
-                })
-            });
-        }
+        console.log('Groq Response Status:', response.status);
         
         if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Gemini API Error:', errorText);
-            throw new Error(`API Error: ${response.status}`);
+            const errorData = await response.json().catch(() => ({}));
+            console.error('Groq API Error:', errorData);
+            throw new Error(`API Error ${response.status}: ${errorData.error?.message || 'Request failed'}`);
         }
         
         const data = await response.json();
+        console.log('Groq Success!', data);
         
-        if (data.candidates && data.candidates[0] && data.candidates[0].content) {
-            const answer = data.candidates[0].content.parts[0].text;
+        if (data.choices && data.choices[0] && data.choices[0].message) {
+            const answer = data.choices[0].message.content;
             aiAnswerDiv.innerHTML = `
-                <h2>🤖 AI Answer</h2>
+                <h2>🤖 AI Answer (Powered by Groq Llama 3.3)</h2>
                 <p>${answer.replace(/\n/g, '<br><br>')}</p>
             `;
         } else {
             throw new Error('Invalid response format');
         }
     } catch (error) {
-        console.error('AI Error:', error);
+        console.error('Groq Error:', error);
         aiAnswerDiv.innerHTML = `
             <h2>🤖 AI Answer</h2>
             <p style="color: red;">❌ <strong>Error:</strong> ${error.message}</p>
             <p><strong>Troubleshooting:</strong></p>
             <ul>
-                <li>Verify your Gemini API key in config.js</li>
-                <li>Check at <a href="https://aistudio.google.com" target="_blank">Google AI Studio</a></li>
-                <li>Make sure the API key is active and valid</li>
+                <li>Check your Groq API key in config.js (should start with "gsk_")</li>
+                <li>Verify at <a href="https://console.groq.com" target="_blank">Groq Console</a></li>
+                <li>Make sure you have API access enabled</li>
             </ul>
         `;
     }
 }
+
 
 // 2. Search YouTube Videos - TOP 5 ONLY
 async function searchYouTube(query) {
