@@ -10,7 +10,7 @@
 
 A modern, intelligent web application that helps students find educational content across multiple sources using AI and real-time search APIs.
 
-[🚀 Live Demo](https://your-site-name.netlify.app) • [📝 Report Bug](https://github.com/YOUR-USERNAME/student-study-assistant/issues) • [✨ Request Feature](https://github.com/YOUR-USERNAME/student-study-assistant/issues)
+[🚀 Live Demo](https://ai-study-assistant-buddy.netlify.app/) • [📝 Report Bug](https://github.com/YOUR-USERNAME/student-study-assistant/issues) • [✨ Request Feature](https://github.com/YOUR-USERNAME/student-study-assistant/issues)
 
 </div>
 
@@ -76,17 +76,6 @@ Built with vanilla HTML, CSS, and JavaScript, this project demonstrates modern w
 ---
 
 ## 🎥 Demo
-
-### Screenshots
-
-**Desktop View**
-![Desktop Screenshot](https://via.placeholder.com/800x400?text=Add+Your+Screenshot)
-
-**Mobile View**
-![Mobile View](https://via.placeholder.com/400x800?text=Add+Your+Mobile+Screenshot)
-
-**Search Results**
-![Search Results](https://via.placeholder.com/800x400?text=Add+Search+Results+Screenshot)
 
 ### Live Demo
 👉 **[Try it live here](https://ai-study-assistant-buddy.netlify.app/)**
