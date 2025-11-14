@@ -31,7 +31,7 @@ async function searchAll() {
     document.getElementById('results').style.display = 'block';
 }
 
-// CORRECTED: Using the new model name
+// 1 AI
 async function getAIAnswer(query) {
     const aiAnswerDiv = document.getElementById('aiAnswer');
     aiAnswerDiv.innerHTML = '<h2>🤖 AI Answer</h2><p>Loading...</p>';
@@ -146,30 +146,40 @@ async function searchYouTube(query) {
 
 
 // 3. Search Articles
+// Using Serper.dev API - 2,500 free searches, no credit card!
 async function searchArticles(query) {
     const articlesDiv = document.getElementById('articles');
-    articlesDiv.innerHTML = '<h2>📰 Related Articles</h2><p>Loading...</p>';
+    articlesDiv.innerHTML = '<h2>📰 Top 5 Related Articles</h2><p>Loading...</p>';
     
     try {
-        const url = `https://www.googleapis.com/customsearch/v1?key=${CONFIG.GOOGLE_CSE_KEY}&cx=${CONFIG.GOOGLE_CSE_ID}&q=${encodeURIComponent(query)}&num=5`;
-        
-        const response = await fetch(url);
+        const response = await fetch('https://google.serper.dev/search', {
+            method: 'POST',
+            headers: {
+                'X-API-KEY': CONFIG.SERPER_API_KEY,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                q: query,
+                num: 5
+            })
+        });
         
         if (!response.ok) {
             throw new Error(`API Error: ${response.status}`);
         }
         
         const data = await response.json();
+        console.log('Serper Response:', data);
         
-        let html = '<h2>📰 Related Articles</h2>';
+        let html = '<h2>📰 Top 5 Related Articles</h2>';
         
-        if (data.items && data.items.length > 0) {
+        if (data.organic && data.organic.length > 0) {
             html += '<ul>';
-            data.items.forEach(item => {
+            data.organic.slice(0, 5).forEach((item, index) => {
                 html += `
                     <li>
-                        <a href="${item.link}" target="_blank">📄 ${item.title}</a>
-                        <p>${item.snippet || ''}</p>
+                        <a href="${item.link}" target="_blank">${index + 1}. ${item.title}</a>
+                        <p>${(item.snippet || '').substring(0, 120)}...</p>
                     </li>
                 `;
             });
@@ -182,205 +192,165 @@ async function searchArticles(query) {
     } catch (error) {
         console.error('Articles Error:', error);
         articlesDiv.innerHTML = `
-            <h2>📰 Related Articles</h2>
-            <p style="color: red;">❌ Unable to fetch articles. Error: ${error.message}</p>
+            <h2>📰 Top 5 Related Articles</h2>
+            <p style="color: red;">❌ Error: ${error.message}</p>
         `;
     }
 }
 
+
 // 4. Search Study Materials - IMPROVED VERSION
+// Using Serper.dev for study materials
 async function searchStudyMaterials(query) {
     const materialsDiv = document.getElementById('studyMaterials');
-    materialsDiv.innerHTML = '<h2>📚 Study Materials</h2><p>Loading...</p>';
+    materialsDiv.innerHTML = '<h2>📚 Top 5 Study Materials</h2><p>Loading...</p>';
     
     try {
-        if (!CONFIG.GOOGLE_CSE_KEY || !CONFIG.GOOGLE_CSE_ID) {
-            throw new Error('API key or Search Engine ID is missing');
-        }
-        
-        // IMPROVED: Search the entire web for PDFs and PPTs (not just Google Drive)
-        // Google Drive has limited publicly available files
         const pdfQuery = `${query} filetype:pdf`;
-        const pptQuery = `${query} filetype:ppt OR filetype:pptx`;
         
-        console.log('Searching for study materials...');
-        console.log('PDF Query:', pdfQuery);
-        console.log('PPT Query:', pptQuery);
+        const response = await fetch('https://google.serper.dev/search', {
+            method: 'POST',
+            headers: {
+                'X-API-KEY': CONFIG.SERPER_API_KEY,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                q: pdfQuery,
+                num: 5
+            })
+        });
         
-        const [pdfResponse, pptResponse] = await Promise.all([
-            fetch(`https://www.googleapis.com/customsearch/v1?key=${CONFIG.GOOGLE_CSE_KEY}&cx=${CONFIG.GOOGLE_CSE_ID}&q=${encodeURIComponent(pdfQuery)}&num=5`),
-            fetch(`https://www.googleapis.com/customsearch/v1?key=${CONFIG.GOOGLE_CSE_KEY}&cx=${CONFIG.GOOGLE_CSE_ID}&q=${encodeURIComponent(pptQuery)}&num=5`)
-        ]);
+        const data = await response.json();
         
-        console.log('PDF Response Status:', pdfResponse.status);
-        console.log('PPT Response Status:', pptResponse.status);
+        let html = '<h2>📚 Top 5 Study Materials</h2>';
         
-        const pdfData = pdfResponse.ok ? await pdfResponse.json() : null;
-        const pptData = pptResponse.ok ? await pptResponse.json() : null;
-        
-        console.log('PDF Results:', pdfData);
-        console.log('PPT Results:', pptData);
-        
-        let html = '<h2>📚 Study Materials</h2>';
-        let foundAny = false;
-        
-        if (pdfData && pdfData.items && pdfData.items.length > 0) {
-            html += '<h3>📕 PDF Documents</h3><ul>';
-            pdfData.items.forEach(item => {
+        if (data.organic && data.organic.length > 0) {
+            html += '<ul>';
+            data.organic.slice(0, 5).forEach((item, index) => {
                 html += `
                     <li>
-                        <a href="${item.link}" target="_blank">${item.title}</a>
-                        <p>${item.snippet || ''}</p>
+                        <a href="${item.link}" target="_blank">📕 ${index + 1}. ${item.title}</a>
+                        <p>${(item.snippet || '').substring(0, 120)}...</p>
                     </li>
                 `;
             });
             html += '</ul>';
-            foundAny = true;
-        }
-        
-        if (pptData && pptData.items && pptData.items.length > 0) {
-            html += '<h3>📊 Presentations (PPT/PPTX)</h3><ul>';
-            pptData.items.forEach(item => {
-                html += `
-                    <li>
-                        <a href="${item.link}" target="_blank">${item.title}</a>
-                        <p>${item.snippet || ''}</p>
-                    </li>
-                `;
-            });
-            html += '</ul>';
-            foundAny = true;
-        }
-        
-        if (!foundAny) {
-            html += `
-                <p>ℹ️ No study materials found for "${query}".</p>
-                <p><strong>Tips:</strong></p>
-                <ul>
-                    <li>Try more specific search terms (e.g., "photosynthesis biology")</li>
-                    <li>Common topics tend to have more publicly available materials</li>
-                    <li>Make sure your Custom Search Engine is set to "Search the entire web"</li>
-                </ul>
-            `;
+        } else {
+            html += '<p>No study materials found.</p>';
         }
         
         materialsDiv.innerHTML = html;
     } catch (error) {
         console.error('Study Materials Error:', error);
-        materialsDiv.innerHTML = `
-            <h2>📚 Study Materials</h2>
-            <p style="color: red;">❌ Error: ${error.message}</p>
-            <p>Check browser Console (F12) for details.</p>
-        `;
+        materialsDiv.innerHTML = `<h2>📚 Study Materials</h2><p style="color: red;">❌ Error: ${error.message}</p>`;
     }
 }
 
+
 // 5. Search for Cheat Sheets
+// Using Serper.dev for cheat sheets
 async function searchCheatSheets(query) {
     const cheatSheetsDiv = document.getElementById('cheatSheets');
     cheatSheetsDiv.innerHTML = '<h2>📋 Cheat Sheets</h2><p>Loading...</p>';
     
     try {
-        if (!CONFIG.GOOGLE_CSE_KEY || !CONFIG.GOOGLE_CSE_ID) {
-            throw new Error('API key or Search Engine ID is missing');
-        }
+        const cheatQuery = `${query} cheat sheet`;
         
-        // Search for cheat sheets from popular educational sites
-        const cheatSheetQuery = `${query} cheat sheet`;
+        const response = await fetch('https://google.serper.dev/search', {
+            method: 'POST',
+            headers: {
+                'X-API-KEY': CONFIG.SERPER_API_KEY,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                q: cheatQuery,
+                num: 5
+            })
+        });
         
-        // Also search for "quick reference" as an alternative
-        const quickRefQuery = `${query} quick reference guide`;
+        const data = await response.json();
         
-        console.log('Searching for cheat sheets...');
-        console.log('Cheat Sheet Query:', cheatSheetQuery);
+        let html = '<h2>📋 Top 5 Cheat Sheets</h2>';
         
-        // Search for both types
-        const [cheatResponse, quickRefResponse] = await Promise.all([
-            fetch(`https://www.googleapis.com/customsearch/v1?key=${CONFIG.GOOGLE_CSE_KEY}&cx=${CONFIG.GOOGLE_CSE_ID}&q=${encodeURIComponent(cheatSheetQuery)}&num=5`),
-            fetch(`https://www.googleapis.com/customsearch/v1?key=${CONFIG.GOOGLE_CSE_KEY}&cx=${CONFIG.GOOGLE_CSE_ID}&q=${encodeURIComponent(quickRefQuery)}&num=3`)
-        ]);
-        
-        console.log('Cheat Sheet Response Status:', cheatResponse.status);
-        console.log('Quick Reference Response Status:', quickRefResponse.status);
-        
-        const cheatData = cheatResponse.ok ? await cheatResponse.json() : null;
-        const quickRefData = quickRefResponse.ok ? await quickRefResponse.json() : null;
-        
-        let html = '<h2>📋 Cheat Sheets & Quick References</h2>';
-        let foundAny = false;
-        
-        // Combine results and remove duplicates
-        const allResults = [];
-        const seenUrls = new Set();
-        
-        if (cheatData && cheatData.items) {
-            cheatData.items.forEach(item => {
-                if (!seenUrls.has(item.link)) {
-                    allResults.push(item);
-                    seenUrls.add(item.link);
-                }
-            });
-        }
-        
-        if (quickRefData && quickRefData.items) {
-            quickRefData.items.forEach(item => {
-                if (!seenUrls.has(item.link)) {
-                    allResults.push(item);
-                    seenUrls.add(item.link);
-                }
-            });
-        }
-        
-        if (allResults.length > 0) {
+        if (data.organic && data.organic.length > 0) {
             html += '<ul>';
-            allResults.forEach(item => {
-                // Check if it's from a popular cheat sheet site
+            data.organic.slice(0, 5).forEach((item, index) => {
                 let icon = '📄';
                 if (item.link.includes('cheatography.com')) icon = '⭐';
-                else if (item.link.includes('overapi.com')) icon = '⭐';
                 else if (item.link.includes('codecademy.com')) icon = '💻';
-                else if (item.link.includes('geeksforgeeks.org')) icon = '💻';
-                else if (item.link.includes('github.com')) icon = '💻';
                 
                 html += `
                     <li>
-                        <a href="${item.link}" target="_blank">${icon} ${item.title}</a>
-                        <p>${item.snippet || ''}</p>
+                        <a href="${item.link}" target="_blank">${icon} ${index + 1}. ${item.title}</a>
+                        <p>${(item.snippet || '').substring(0, 120)}...</p>
                     </li>
                 `;
             });
             html += '</ul>';
-            foundAny = true;
-        }
-        
-        if (!foundAny) {
-            html += `
-                <p>ℹ️ No cheat sheets found for "${query}".</p>
-                <p><strong>Recommended Cheat Sheet Websites:</strong></p>
-                <ul>
-                    <li><a href="https://cheatography.com" target="_blank">📄 Cheatography - 6,000+ Free Cheat Sheets</a></li>
-                    <li><a href="https://overapi.com" target="_blank">💻 OverAPI - Programming Cheat Sheets</a></li>
-                    <li><a href="https://www.codecademy.com/resources/cheatsheets/all" target="_blank">💻 Codecademy - Coding Cheat Sheets</a></li>
-                    <li><a href="https://www.geeksforgeeks.org/cheatsheets/" target="_blank">💻 GeeksforGeeks - All Coding Cheat Sheets</a></li>
-                    <li><a href="https://zerotomastery.io/cheatsheets/" target="_blank">💻 Zero to Mastery - Tech Cheat Sheets</a></li>
-                </ul>
-            `;
+        } else {
+            html += '<p>No cheat sheets found.</p>';
         }
         
         cheatSheetsDiv.innerHTML = html;
     } catch (error) {
         console.error('Cheat Sheets Error:', error);
-        cheatSheetsDiv.innerHTML = `
-            <h2>📋 Cheat Sheets</h2>
-            <p style="color: red;">❌ Error: ${error.message}</p>
-            <p>Browse popular cheat sheet sites manually:</p>
-            <ul>
-                <li><a href="https://cheatography.com" target="_blank">Cheatography.com</a></li>
-                <li><a href="https://overapi.com" target="_blank">OverAPI.com</a></li>
-                <li><a href="https://www.geeksforgeeks.org/cheatsheets/" target="_blank">GeeksforGeeks</a></li>
-            </ul>
-        `;
+        cheatSheetsDiv.innerHTML = `<h2>📋 Cheat Sheets</h2><p style="color: red;">❌ Error: ${error.message}</p>`;
     }
+}
+
+// Check for saved theme preference or default to light mode
+const currentTheme = localStorage.getItem('theme') || 'light';
+
+// Apply saved theme on page load
+if (currentTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+}
+
+// Dark mode toggle button event listener
+document.getElementById('themeToggle').addEventListener('click', function() {
+    document.body.classList.toggle('dark-mode');
+    
+    // Save theme preference to localStorage
+    let theme = 'light';
+    if (document.body.classList.contains('dark-mode')) {
+        theme = 'dark';
+    }
+    localStorage.setItem('theme', theme);
+    
+    // Optional: Add haptic feedback on mobile
+    if (navigator.vibrate) {
+        navigator.vibrate(50);
+    }
+    
+    console.log('Theme switched to:', theme);
+});
+
+// Optional: Auto-detect system preference
+function detectSystemTheme() {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // User prefers dark mode
+        if (!localStorage.getItem('theme')) {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark');
+        }
+    }
+}
+
+// Detect system theme on first visit
+detectSystemTheme();
+
+// Listen for system theme changes
+if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        // Only auto-switch if user hasn't manually set a preference
+        if (!localStorage.getItem('theme')) {
+            if (e.matches) {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+        }
+    });
 }
 
 
