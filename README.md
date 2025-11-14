@@ -156,7 +156,7 @@ text
 ---
 
 ## 📁 Project Structure
-
+<pre>
 student-study-assistant/
 ├── index.html # Main HTML file
 ├── config.js # API keys configuration (gitignored)
@@ -167,6 +167,7 @@ student-study-assistant/
 ├── .gitignore # Git ignore rules
 ├── README.md # Project documentation (this file)
 └── LICENSE # MIT License
+</pre>
 
 text
 
