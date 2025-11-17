@@ -298,60 +298,11 @@ async function searchCheatSheets(query) {
     }
 }
 
-// Check for saved theme preference or default to light mode
-const currentTheme = localStorage.getItem('theme') || 'light';
 
-// Apply saved theme on page load
-if (currentTheme === 'dark') {
-    document.body.classList.add('dark-mode');
-}
 
-// Dark mode toggle button event listener
-document.getElementById('themeToggle').addEventListener('click', function() {
-    document.body.classList.toggle('dark-mode');
-    
-    // Save theme preference to localStorage
-    let theme = 'light';
-    if (document.body.classList.contains('dark-mode')) {
-        theme = 'dark';
-    }
-    localStorage.setItem('theme', theme);
-    
-    // Optional: Add haptic feedback on mobile
-    if (navigator.vibrate) {
-        navigator.vibrate(50);
-    }
-    
-    console.log('Theme switched to:', theme);
-});
 
-// Optional: Auto-detect system preference
-function detectSystemTheme() {
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        // User prefers dark mode
-        if (!localStorage.getItem('theme')) {
-            document.body.classList.add('dark-mode');
-            localStorage.setItem('theme', 'dark');
-        }
-    }
-}
 
-// Detect system theme on first visit
-detectSystemTheme();
 
-// Listen for system theme changes
-if (window.matchMedia) {
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-        // Only auto-switch if user hasn't manually set a preference
-        if (!localStorage.getItem('theme')) {
-            if (e.matches) {
-                document.body.classList.add('dark-mode');
-            } else {
-                document.body.classList.remove('dark-mode');
-            }
-        }
-    });
-}
 
 
 // Enter key support
@@ -365,3 +316,150 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// ========================================
+// NAVIGATION BAR FUNCTIONALITY
+// ========================================
+
+// Show/hide navigation bar
+function toggleNavigation(show) {
+    const nav = document.getElementById('resultsNav');
+    if (show) {
+        nav.style.display = 'flex';
+    } else {
+        nav.style.display = 'none';
+    }
+}
+
+// Update your searchAll function to show navigation
+async function searchAll() {
+    const query = document.getElementById('queryInput').value.trim();
+    
+    if (!query) {
+        alert('Please enter a question!');
+        return;
+    }
+    
+    // Show loading
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('results').style.display = 'none';
+    toggleNavigation(false); // Hide nav during loading
+    
+    // Clear previous results
+    document.getElementById('aiAnswer').innerHTML = '';
+    document.getElementById('videos').innerHTML = '';
+    document.getElementById('articles').innerHTML = '';
+    document.getElementById('studyMaterials').innerHTML = '';
+    document.getElementById('cheatSheets').innerHTML = '';
+    
+    // Fetch all data concurrently
+    await Promise.all([
+        getAIAnswer(query),
+        searchYouTube(query),
+        searchArticles(query),
+        searchStudyMaterials(query),
+        searchCheatSheets(query)
+    ]);
+    
+    // Hide loading, show results and navigation
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('results').style.display = 'block';
+    toggleNavigation(true); // Show navigation after results load
+    
+    // Initialize navigation highlighting
+    initializeNavigation();
+}
+
+// Initialize navigation highlighting on scroll
+function initializeNavigation() {
+    const sections = document.querySelectorAll('.section');
+    const navItems = document.querySelectorAll('.nav-item');
+    
+    // Smooth scroll to section on nav click
+    navItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetSection = document.getElementById(targetId);
+            
+            if (targetSection) {
+                targetSection.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+                
+                // Update active state
+                navItems.forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+            }
+        });
+    });
+    
+    // Highlight active section on scroll
+    const observerOptions = {
+        root: null,
+        rootMargin: '-100px 0px -60% 0px',
+        threshold: 0
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                    if (item.getAttribute('href') === `#${id}`) {
+                        item.classList.add('active');
+                    }
+                });
+            }
+        });
+    }, observerOptions);
+    
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+}
+
+// Scroll to top button (optional enhancement)
+function addScrollToTop() {
+    const scrollBtn = document.createElement('button');
+    scrollBtn.innerHTML = '⬆️';
+    scrollBtn.className = 'scroll-to-top';
+    scrollBtn.style.cssText = `
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        display: none;
+        z-index: 1000;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+    `;
+    
+    document.body.appendChild(scrollBtn);
+    
+    // Show/hide based on scroll
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            scrollBtn.style.display = 'block';
+        } else {
+            scrollBtn.style.display = 'none';
+        }
+    });
+    
+    // Scroll to top on click
+    scrollBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
+
+// Initialize scroll to top button
+addScrollToTop();

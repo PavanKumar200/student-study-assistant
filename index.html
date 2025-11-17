@@ -11,11 +11,19 @@
         <h1>🎓 Student Study Assistant</h1>
         <p class="subtitle">Your AI-powered companion for learning anything!</p>
         
-    
         <div class="search-box">
             <input type="text" id="queryInput" placeholder="Ask anything... (e.g., photosynthesis, python programming)" />
             <button onclick="searchAll()">🔍 Search</button>
         </div>
+
+        <!-- NEW: Navigation Bar -->
+        <nav class="results-nav" id="resultsNav" style="display: none;">
+            <a href="#aiAnswer" class="nav-item active">🤖 AI Answer</a>
+            <a href="#videos" class="nav-item">📺 Videos</a>
+            <a href="#articles" class="nav-item">📰 Articles</a>
+            <a href="#studyMaterials" class="nav-item">📚 Materials</a>
+            <a href="#cheatSheets" class="nav-item">📋 Cheat Sheets</a>
+        </nav>
 
         <div id="loading" class="loading" style="display: none;">
             <p>Searching for amazing content...</p>
