@@ -424,12 +424,12 @@ function initializeNavigation() {
 // Scroll to top button (optional enhancement)
 function addScrollToTop() {
     const scrollBtn = document.createElement('button');
-    scrollBtn.innerHTML = '⬆️';
+    scrollBtn.innerHTML = '⬆';
     scrollBtn.className = 'scroll-to-top';
     scrollBtn.style.cssText = `
         position: fixed;
         bottom: 30px;
-        right: 30px;
+        right: 10px;
         width: 50px;
         height: 50px;
         border-radius: 50%;
